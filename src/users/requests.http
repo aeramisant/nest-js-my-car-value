@@ -1,0 +1,25 @@
+POST http://localhost:3456/auth/signup
+content-type: application/json
+
+{
+  "email": "333@example.com",
+  "password": "1234qwer"
+}
+
+### Find user by ID
+GET http://localhost:3456/auth/4
+
+### Find users with provided email
+GET http://localhost:3456/auth/?email=god@example.com
+
+### Delete user with ID
+DELETE http://localhost:3456/auth/4
+
+### Update user
+PATCH http://localhost:3456/auth/3
+Content-Type: application/json
+
+{
+  "email": "newemail@test.com",
+  "password": "222222222"
+}
