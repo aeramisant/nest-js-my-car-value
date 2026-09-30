@@ -7,7 +7,7 @@ content-type: application/json
 }
 
 ### Find user by ID
-GET http://localhost:3456/auth/4
+GET http://localhost:3456/auth/3
 
 ### Find users with provided email
 GET http://localhost:3456/auth/?email=god@example.com
@@ -21,5 +21,5 @@ Content-Type: application/json
 
 {
   "email": "newemail@test.com",
-  "password": "222222222"
+  "password": "3333333333"
 }
