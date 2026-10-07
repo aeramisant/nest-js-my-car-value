@@ -13,6 +13,10 @@ export class UsersService {
   }
 
   async findUserById(id: number) {
+    if (!id) {
+      console.log('USER IS NOT FOUND----------------------->');
+      return null;
+    }
     const user = await this.repo.findOneBy({ id });
     console.log('USER IS FOUND----------------------->', user);
     return user;

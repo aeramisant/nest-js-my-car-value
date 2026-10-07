@@ -8,21 +8,67 @@ import {
   Post,
   Query,
   NotFoundException,
+  Session,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { UsersService } from './users.service.js';
 import { Serialize } from '../interceptors/serialize.interceptor.js';
 import { UserDto } from './dto/user.dto.js';
+import { AuthService } from './auth.service.js';
+import { CurrentUser } from './decorators/current-user.decorators.js';
+import { User } from './user.entity.js';
+import { AuthGuard } from '../guards/auth.guard.js';
 
 @Controller('auth')
 @Serialize(UserDto)
 export class UsersController {
-  constructor(private usersService: UsersService) {}
-  @Post('/signup')
-  async createUser(@Body() body: CreateUserDto) {
-    const user = await this.usersService.create(body.email, body.password);
+  constructor(
+    private usersService: UsersService,
+    private autService: AuthService,
+  ) {}
+
+  // @Get('/colors/:color')
+  // setColor(@Param('color') color: String, @Session() session: any) {
+  //   session.color = color;
+  // }
+
+  // @Get('/colors')
+  // getColor(@Session() session: any) {
+  //   console.log(session);
+  //   return session.color;
+  // }
+  // @Get('/whoami')
+  // async whoAmI(@Session() session: any) {
+  //   const user = await this.usersService.findUserById(session.userId);
+  //   console.log('WHO_AM_I ? ---> ', user);
+  //   return user;
+  // }
+  @UseGuards(AuthGuard)
+  @Get('/whoami')
+  async whoAmI(@CurrentUser() user: User) {
+    console.log('WHO_AM_I ? ---> ', user);
     return user;
+  }
+
+  @Post('/signup')
+  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.autService.signup(body.email, body.password);
+    session.userId = user.id;
+    return user;
+  }
+
+  @Post('/signin')
+  async signin(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.autService.signin(body.email, body.password);
+    session.userId = user.id;
+    return user;
+  }
+
+  @Post('/signout')
+  async signout(@Session() session: any) {
+    session.userId = null;
   }
 
   @Get('')

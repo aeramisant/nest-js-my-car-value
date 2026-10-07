@@ -1,8 +1,27 @@
+### SIGNUP
 POST http://localhost:3456/auth/signup
 content-type: application/json
 
 {
-  "email": "333@example.com",
+  "email": "testSession@email.com",
+  "password": "1234qwer"
+}
+
+### SIGNIN
+POST http://localhost:3456/auth/signin
+content-type: application/json
+
+{
+  "email": "testSession@email.com",
+  "password": "1234qwer"
+}
+
+### SIGNOUT
+POST http://localhost:3456/auth/signout
+content-type: application/json
+
+{
+  "email": "testSession@email.com",
   "password": "1234qwer"
 }
 
@@ -23,3 +42,12 @@ Content-Type: application/json
   "email": "newemail@test.com",
   "password": "3333333333"
 }
+
+### Set a color
+GET http://localhost:3456/auth/colors/red
+
+### Get color
+GET http://localhost:3456/auth/colors
+
+### Get currently signed user
+GET http://localhost:3456/auth/whoami
