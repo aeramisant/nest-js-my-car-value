@@ -1,0 +1,5 @@
+### CREATE REPORT
+POST http://localhost:3456/reports
+content-type: application/json
+
+{"price":25000,"make":"Honda","model":"Civic","year":2000,"lng":-122.4194,"lat":37.7749,"milage":85000}
