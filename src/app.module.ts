@@ -23,12 +23,6 @@ import { Report } from './reports/reports.entity.js';
         entities: [User, Report],
       }),
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'better-sqlite3',
-    //   database: 'db.sqlite',
-    //   entities: [User, Report],
-    //   synchronize: true,
-    // }),
     UsersModule,
     ReportsModule,
   ],
