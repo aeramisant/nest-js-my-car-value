@@ -1,4 +1,4 @@
-import { IsEmail } from 'class-validator';
+import { IsBoolean, IsEmail } from 'class-validator';
 import {
   Entity,
   Column,
@@ -15,6 +15,10 @@ import { Report } from '../reports/reports.entity.js';
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ default: true })
+  @IsBoolean()
+  admin: boolean;
 
   @Column()
   @IsEmail()

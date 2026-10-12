@@ -2,4 +2,15 @@
 POST http://localhost:3456/reports
 content-type: application/json
 
-{"price":25000,"make":"Honda","model":"Civic","year":2000,"lng":-122.4194,"lat":37.7749,"milage":85000}
+{"price":25000,"make":"Porche","model":"911","year":2010,"lng":-122.4194,"lat":37.7749,"milage":85000}
+
+### APPROVE REPORT
+PATCH http://localhost:3456/reports/5
+content-type: application/json
+
+{
+    "approved": true
+}
+
+### GET ESTIMATE FOR AN EXISTING VEHICLE
+GET http://localhost:3456/reports?make=honda&model=civic&lng=0&lat=0&mileage=20000&year=1980
