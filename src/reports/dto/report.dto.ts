@@ -19,7 +19,7 @@ export class ReportDto {
   lat: number;
 
   @Expose()
-  milage: number;
+  mileage: number;
 
   @Transform(({ obj }) => obj.user.id)
   @Expose()

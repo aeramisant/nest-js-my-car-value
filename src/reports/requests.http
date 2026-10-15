@@ -2,10 +2,10 @@
 POST http://localhost:3456/reports
 content-type: application/json
 
-{"price":25000,"make":"Porche","model":"911","year":2010,"lng":-122.4194,"lat":37.7749,"milage":85000}
+{"price":25000,"make":"Porche","model":"911","year":2010,"lng":-122.4194,"lat":37.7749,"mileage":85000}
 
 ### APPROVE REPORT
-PATCH http://localhost:3456/reports/5
+PATCH http://localhost:3456/reports/17
 content-type: application/json
 
 {
@@ -13,4 +13,70 @@ content-type: application/json
 }
 
 ### GET ESTIMATE FOR AN EXISTING VEHICLE
-GET http://localhost:3456/reports?make=honda&model=civic&lng=0&lat=0&mileage=20000&year=1980
+GET http://localhost:3456/reports?make=Honda&model=Civic&lng=0&lat=0&mileage=20000&year=1980
+
+### 1 MATCH: exact mileage
+POST http://localhost:3456/reports
+Content-Type: application/json
+
+{"price":15000,"make":"Honda","model":"Civic","year":2015,"lng":-122,"lat":37,"mileage":50000}
+
+### 2 MATCH: mileage 5k off
+POST http://localhost:3456/reports
+Content-Type: application/json
+
+{"price":14000,"make":"Honda","model":"Civic","year":2014,"lng":-121.5,"lat":37.5,"mileage":55000}
+
+### 3 MATCH: mileage 5k off
+POST http://localhost:3456/reports
+Content-Type: application/json
+
+{"price":16500,"make":"Honda","model":"Civic","year":2016,"lng":-123,"lat":36,"mileage":45000}
+
+### 4 MATCH: in range, mileage 100k off
+POST http://localhost:3456/reports
+Content-Type: application/json
+
+{"price":5000,"make":"Honda","model":"Civic","year":2017,"lng":-120,"lat":38,"mileage":150000}
+
+### 5 MATCH: in range, mileage 45k off
+POST http://localhost:3456/reports
+Content-Type: application/json
+
+{"price":30000,"make":"Honda","model":"Civic","year":2013,"lng":-124,"lat":35,"mileage":5000}
+
+### 6 EXCLUDED: year 5 too old
+POST http://localhost:3456/reports
+Content-Type: application/json
+
+{"price":8000,"make":"Honda","model":"Civic","year":2010,"lng":-122,"lat":37,"mileage":50000}
+
+### 7 EXCLUDED: year 5 too new
+POST http://localhost:3456/reports
+Content-Type: application/json
+
+{"price":25000,"make":"Honda","model":"Civic","year":2020,"lng":-122,"lat":37,"mileage":50000}
+
+### 8 EXCLUDED: longitude 12 away
+POST http://localhost:3456/reports
+Content-Type: application/json
+
+{"price":40000,"make":"Honda","model":"Civic","year":2015,"lng":-110,"lat":37,"mileage":50000}
+### 9 EXCLUDED: latitude 8 away
+
+POST http://localhost:3456/reports
+Content-Type: application/json
+
+{"price":40000,"make":"Honda","model":"Civic","year":2015,"lng":-122,"lat":45,"mileage":50000}
+
+### 10 EXCLUDED (for now): lowercase make and model
+POST http://localhost:3456/reports
+Content-Type: application/json
+
+{"price":50000,"make":"honda","model":"civic","year":2015,"lng":-122,"lat":37,"mileage":50000}
+
+### ESTIMATE A: 2015 Civic, 50k miles
+GET http://localhost:3456/reports?make=Honda&model=Civic&lng=-122&lat=37&year=2015&mileage=50000
+
+### ESTIMATE B: same car, 150k miles
+GET http://localhost:3456/reports?make=Honda&model=Civic&lng=-122&lat=37&year=2015&mileage=150000
