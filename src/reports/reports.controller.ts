@@ -23,9 +23,13 @@ import { GetEstimateDto } from './dto/get-estimate.dto.js';
 export class ReportsController {
   constructor(private reportsService: ReportsService) {}
 
-  @Get('/')
+  @Get()
   //   @UseGuards(AdminGuard)
-  getEstimates(@Query() query: GetEstimateDto) {}
+  async getEstimates(@Query() query: GetEstimateDto) {
+    const estimate = await this.reportsService.createEstimate(query);
+
+    return estimate;
+  }
 
   @Post()
   @UseGuards(AuthGuard)
