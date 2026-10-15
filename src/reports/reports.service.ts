@@ -38,18 +38,27 @@ export class ReportsService {
     year,
     mileage,
   }: GetEstimateDto) {
-    const estimate = await this.repo
+    const estimate = await this.repo.manager
       .createQueryBuilder()
-      .select('AVG(price)', 'price')
-      .where('make = :make', { make })
-      .andWhere('model = :model', { model })
-      .andWhere('lng - :lng BETWEEN -5 AND 5', { lng })
-      .andWhere('lat - :lat BETWEEN -5 AND 5', { lat })
-      .andWhere('year - :year BETWEEN -3 AND 3', { year })
-      .andWhere('approved IS TRUE')
-      .orderBy('mileage - :mileage', 'DESC')
-      .setParameters({ mileage })
-      .limit(3)
+      .select('AVG(closest.price)', 'price')
+      .from(
+        (qb) =>
+          qb
+            .subQuery()
+            .select('report.price', 'price')
+            .addSelect('ABS(report.mileage - :mileage)', 'distance')
+            .from(Report, 'report')
+            .where('report.make = :make', { make })
+            .andWhere('report.model = :model', { model })
+            .andWhere('report.lng - :lng BETWEEN -5 AND 5', { lng })
+            .andWhere('report.lat - :lat BETWEEN -5 AND 5', { lat })
+            .andWhere('report.year - :year BETWEEN -3 AND 3', { year })
+            .andWhere('report.approved IS TRUE')
+            .orderBy('distance', 'ASC')
+            .setParameters({ mileage })
+            .limit(3),
+        'closest',
+      )
       .getRawOne();
     console.log('------------------CREATE_ESTIMATE--------------', estimate);
     return estimate;
